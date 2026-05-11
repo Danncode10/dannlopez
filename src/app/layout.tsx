@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { siteConfig } from "@/lib/config";
+import { QueryProvider } from "@/components/query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,26 +14,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-import { siteConfig } from "@/lib/config";
-import { QueryProvider } from "@/components/query-provider";
-import { Toaster } from "sonner";
-
 export const metadata: Metadata = {
-  title: `${siteConfig.name} — AI-Native Starter for Builders`,
-  description: "The backbone template for websites, management systems, apps, and startup ideas. Built with Next.js, Supabase, and Tailwind CSS.",
+  title: `${siteConfig.name} — ${siteConfig.role}`,
+  description: siteConfig.bio,
   metadataBase: new URL(siteConfig.url),
   openGraph: {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
-    title: `${siteConfig.name} — AI-Native Starter for Builders`,
-    description: "The backbone template for websites, management systems, apps, and startup ideas. Built with Next.js, Supabase, and Tailwind CSS.",
+    title: `${siteConfig.name} — ${siteConfig.role}`,
+    description: siteConfig.bio,
     siteName: siteConfig.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — AI-Native Starter for Builders`,
-    description: "The backbone template for websites, management systems, apps, and startup ideas. Built with Next.js, Supabase, and Tailwind CSS.",
+    title: `${siteConfig.name} — ${siteConfig.role}`,
+    description: siteConfig.bio,
   },
 };
 
@@ -43,20 +41,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} scroll-smooth`}
     >
       <body className="min-h-screen flex flex-col antialiased">
-        <QueryProvider>
-          {children}
-          <Toaster
-            position="bottom-right"
-            theme="system"
-            richColors
-            toastOptions={{
-              className: "font-mono font-bold tracking-tight rounded-xl border border-border shadow-2xl",
-            }}
-          />
-        </QueryProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

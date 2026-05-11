@@ -6,17 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "update-types": "bash scripts/update-types.sh",
-    "checkpoint": "bash scripts/checkpoint.sh"
+    "lint": "eslint"
   },
   "dependencies": {
+    "@icons-pack/react-simple-icons": "^13.13.0",
     "@radix-ui/react-tabs": "^1.1.13",
-    "@supabase/ssr": "^0.10.0",
-    "@supabase/supabase-js": "^2.101.1",
     "@tanstack/react-query": "^5.97.0",
-    "@upstash/ratelimit": "^2.0.8",
-    "@upstash/redis": "^1.37.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
@@ -24,6 +19,7 @@
     "next": "16.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-github-calendar": "^5.0.6",
     "react-intersection-observer": "^10.0.3",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0"
