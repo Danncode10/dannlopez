@@ -1,95 +1,132 @@
-<!-- BEGIN:nextjs-agent-rules -->
 # Project Rules & AI Steering (AGENTS.md)
 
 > **Start here**: Always read this file first before taking any action on this project.
 
-You are an expert developer working on **Dann's Vibe-Coding Starter**. This project uses **Next.js 15+ (App Router)** and follows a strict **"Vibe Coding"** architecture built for clarity, speed, and maintainability.
+You are an expert developer working on **Lester Dann G. Lopez's personal portfolio website**. This is a **static, config-driven** Next.js 15+ (App Router) site. There is no database, no authentication, and no backend — all content lives in `src/lib/config.ts` and GitHub data is fetched live via the public GitHub REST API.
+
+## Project Overview
+
+A personal portfolio for Lester Dann G. Lopez, BS Computer Science (Robotics) student at Nueva Vizcaya State University (NVSU). The site targets recruiters and companies and showcases:
+- **About** — background, university, and goals
+- **Projects** — personal, academic, and open-source project cards
+- **GitHub Contributions** — live contribution graph and public repo list
+- **Skills** — languages, frameworks, tools grouped by category
+- **Grades** — academic performance per semester
+
+---
 
 ## Diagnostic Protocol
-**Unified Dependency Check**: Before starting any specialized tasks, verify that the required MCP (Model Context Protocol) tools are enabled and connected.
 
-- **Supabase MCP**: Essential for database schema reading, SQL execution, and types validation.
-- **GitHub MCP**: Essential for version control tasks, including comparing branches, resolving merge conflicts, and checking commit history before suggesting broad refactors.
-- **Terminal MCP**: Essential for running local backup commands and interacting with the local system environment.
+Before starting any specialized task, verify that the required MCP tools are connected:
 
-**Missing Tool Alert Protocol:** 
-If any required MCP tool is missing for the current task, stop immediately and provide the exact instruction block below:
+- **GitHub MCP**: Required for fetching repo lists, contribution data, and branch history.
 
-⚠️ [Tool Name] MCP Not Detected: I need this to [Specific Task].
-To fix: 
-> 1. Open your AI IDE's MCP Store (Settings → MCP Store).
-> 2. Install "[Tool Name]" and follow the setup.
-> 3. Use your credentials from .env.local.
+If the GitHub MCP is missing, alert the user:
+
+> ⚠️ GitHub MCP Not Detected: I need this to fetch live GitHub data.
+> Fix: Open MCP Store → Install "GitHub" → authenticate with your GitHub account.
+
+No Supabase MCP or Terminal MCP is required for this project.
+
+---
+
+## Content Architecture (Non-Negotiable)
+
+All site content is config-driven. No content should be hardcoded inside components.
+
+```
+src/lib/config.ts        ← Single source of truth for ALL site data
+```
+
+| Export | What it controls |
+|---|---|
+| `siteConfig` | Name, bio, university, GitHub username, email, social links |
+| `projectsConfig` | Project cards — title, description, stack tags, GitHub/live URLs |
+| `skillsConfig` | Skills array — see `Skills.md` for the full schema |
+| `gradesConfig` | Subjects, grades, semester label, GPA |
+
+**Rule**: When asked to add, update, or remove any content (a project, a skill, a grade), edit `src/lib/config.ts` only. Do not touch component files for content changes.
+
+---
+
+## GitHub Data Fetching
+
+- Use the **GitHub REST API** (`https://api.github.com`) for live data.
+- The username comes from `siteConfig.githubUsername` — never hardcode it.
+- No API key is needed for public data; use unauthenticated requests.
+- Fetch logic belongs in `src/hooks/` as custom hooks (e.g., `useGitHubRepos`, `useContributions`).
+- Cache responses with `next: { revalidate: 3600 }` (1-hour ISR) on Server Components, or use TanStack Query on Client Components.
+
+---
 
 ## Architectural Guardrails
-1.  **Separation of Concerns**: UI components must NOT contain database logic or direct API calls.
-2.  **Logic Layer**: All business logic and Supabase queries MUST live strictly within `src/services/`.
-3.  **Context First**: ALWAYS look for a feature blueprint in `src/prompts/features/` before starting a new task.
-4.  **Type Safety**: Use the generated TypeScript types from `src/types/` for all data structures. Never use `any`.
 
-## 🛠 Tech Stack Conventions
--   **React**: Use Functional Components and Hooks. Favor Server Components for data fetching.
--   **CSS**: Use Tailwind CSS for all styling.
--   **Components**: Use Shadcn/UI for UI primitives.
--   **Async**: Use `async/await` for all asynchronous operations.
+1. **Config-Driven Content**: UI components read from `config.ts` — they never own data.
+2. **Separation of Concerns**: Fetching logic lives in `src/hooks/`. Rendering lives in `src/components/`. Config lives in `src/lib/config.ts`.
+3. **Type Safety**: Every config object must have a TypeScript interface in `src/types/`. Never use `any`.
+4. **No Database**: There is no Supabase, no RLS, no auth. Do not introduce backend dependencies.
 
-## Vibe Workflow
--   If you encounter a bug, fix it in the **Service** layer first.
--   If you need a new data structure, define or request generation of its types in `src/types/` first.
--   **GitHub MCP Mastery**: Use the GitHub MCP whenever the user reports a regression or a merge conflict. Compare current files with historical commits before asking for manual diffs.
--   **Backup & Snapshot**: If the user runs `npm run checkpoint` and provides the generated prompt, you must:
-    1. Verify Supabase MCP connection.
-    2. Read the live schema (Tables, Enums, RLS, Triggers) for the specified project ID.
-    3. Generate the full DDL and save it to the specified timestamped SQL file in `supabase/backups/`.
--   **Project Provisioning**: If requested to create a new project and apply a schema:
-    1. List organizations to help the user choose one.
-    2. Ask for the Project Name and Organization ID.
-    3. Check costs using `get_cost` and `confirm_cost` before `create_project`.
-    4. After initialization, read the latest backup from `supabase/backups/` and apply it using `apply_migration`.
--   **Project Initialization & Migration**: If a user provides a Project ID for a new project:
-    1. Locate the latest `.sql` backup in `supabase/backups/`.
-    2. Read and apply the schema using the Supabase MCP.
-    3. **MANDATORY Verification**: After execution, list tables and functions in the `public` schema.
-    4. Confirm existence of core architecture (`profiles` table, `handle_new_user` function).
-    5. Do not report success until verification is complete.
--   **Be concise and proactive**. If you see an obvious optimization that fits the application's clean aesthetic, suggest it.
+---
 
-## 🔒 RLS Security Constraint (Non-Negotiable)
-Always check `src/types/supabase.ts` and **assume RLS is active on every table**. Every `select` or `update` in a service must include an `.eq('id', userId)` filter to pass security policies unless explicitly building a public endpoint. Skipping this is a security vulnerability.
+## Tech Stack Conventions
+
+- **React**: Functional components and hooks. Favor Server Components for data fetching.
+- **CSS**: Tailwind CSS only. Use semantic tokens — never hardcode colors.
+- **Components**: Shadcn/UI for all UI primitives.
+- **Async**: `async/await` for all asynchronous operations.
+
+---
 
 ## Code Architecture Rules
-1.  **Maintain Structure**: DO NOT arbitrarily change existing UI structure, folder hierarchy, or core logic unless explicitly asked.
-2.  **MODULARITY**: Extract repeatable logic into reusable components or custom hooks; avoid spaghetti code.
-3.  **DIRECTORY**: Place new components in the existing `/components/` folder and logic in `/lib/` or `/hooks/`.
-4.  **CLEANLINESS**: Adhere to DRY (Don't Repeat Yourself) and SOLID design principles.
-5.  **OUTPUT**: If any code changes are made, provide a concise, professional Git commit message (e.g., 'feat: add user login validation') at the end of your response for easy copy-pasting.
-6.  **SERVER VS. CLIENT**: Default to Server Components. Only use `'use client'` when interactivity, client state, or specific lifecycle effects are strictly required.
-7.  **STRICT SEMANTIC COMPLIANCE**: Use ONLY Shadcn/Tailwind semantic tokens (e.g., bg-background, bg-card, text-foreground). Stating hex codes, rgba, or hardcoded neutral/white/blur colors is a CRITICAL FAILURE.
 
+1. **Maintain Structure**: Do not change folder hierarchy or component responsibilities unless explicitly asked.
+2. **Modularity**: Extract reusable logic into custom hooks. Avoid copy-pasting logic across components.
+3. **Directory**: New components go in `src/components/`. New hooks go in `src/hooks/`. Config stays in `src/lib/`.
+4. **DRY**: If the same data shape appears in two places, it belongs in `config.ts` with a shared type.
+5. **Commit Messages**: After any code change, provide a concise Git commit message (e.g., `feat: add grades section`).
+6. **Server vs. Client**: Default to Server Components. Use `'use client'` only when interactivity, browser APIs, or client state is strictly required.
 
-## 🎨 UI Quality Standards (Non-Negotiable)
-- **Mobile-First**: Every component must be fully responsive. Start at 375px. No horizontal scroll.
-- **Touch Targets**: All interactive elements (buttons, inputs, links) must be at minimum 48px tall.
-- **Visual Hierarchy**: Use font-size, weight, and spacing intentionally. Headings must feel like headings.
-- **Form UX**: Labels go ABOVE inputs, never as placeholder-only. Inputs must have visible focus rings using `ring-ring`.
-- **Spacing Rhythm**: Use consistent spacing scale (p-4, p-6, gap-4, gap-6). Never cram elements together.
-- **Feedback States**: Every button must have a loading state. Every input must have an error state. Use `text-destructive` for errors.
-- **Empty States**: Never leave a blank screen. Use a centered icon + message for empty or loading states.
-- **Semantic Tokens in Practice**: 
+---
+
+## UI Quality Standards (Non-Negotiable)
+
+- **Mobile-First**: Every component must be fully responsive starting at 375px. No horizontal scroll.
+- **Touch Targets**: All interactive elements must be at minimum 48px tall.
+- **Visual Hierarchy**: Headings must feel like headings — use size, weight, and spacing intentionally.
+- **Spacing Rhythm**: Use consistent Tailwind scale (`p-4`, `p-6`, `gap-4`, `gap-6`). Never cram elements.
+- **Empty States**: Never show a blank area. Use a centered icon + message for loading or empty states.
+- **Semantic Tokens Only**:
   - Backgrounds: `bg-background`, `bg-card`, `bg-muted`
   - Text: `text-foreground`, `text-muted-foreground`, `text-primary`
   - Borders: `border`, `border-border`, `border-input`
-  - Buttons: always use Shadcn `<Button variant="default">` or `variant="outline"` — never raw `<button>`
-- **Card Pattern**: Wrap all form pages in `<Card>` with `<CardHeader>`, `<CardContent>`, `<CardFooter>` from Shadcn.
-- **Multi-step Forms**: Use a visible step indicator (e.g., "Step 2 of 3") with a progress bar using `bg-primary`.
+  - Buttons: always use Shadcn `<Button variant="default">` or `variant="outline"` — never a raw `<button>`
+- **No hardcoded colors**: hex codes, rgba values, or Tailwind `neutral-*`/`white`/`black` classes are a CRITICAL FAILURE unless inside `globals.css` theme tokens.
+- **Card Pattern**: Wrap section cards in `<Card>` with `<CardHeader>`, `<CardContent>` from Shadcn.
 
+---
 
-## 🗄️ Supabase Workflow for AI Agents
-1. **Live Schema Awareness**: Use the **Supabase MCP Server** to query the live database state (tables, types, RLS policies). Do not assume schema structure without checking.
-2. **Schema Changes via MCP**: Execute SQL directly using the MCP when prompted to alter tables or policies. Do not ask the user for manual SQL entry.
-3. **Sync Types**: After any schema change, instruct the user to run `npm run update-types` to refresh `src/types/supabase.ts` via the Supabase CLI. Rely ONLY on these generated definitions.
-4. **RLS Constraint**: Always assume Row Level Security (RLS) is active. By default, write queries that respect RLS constraints.
+## Section-Specific Rules
 
-## Project Overview
-A high-performance Next.js starter optimized for AI-native development (Vibe Coding), featuring automated type-safety and live database orchestration.
-<!-- END:nextjs-agent-rules -->
+### About
+- Content from `siteConfig.bio`, `siteConfig.university`, `siteConfig.degree`.
+- Include a profile photo (`public/avatar.jpg`) with a fallback initial avatar.
+
+### Projects
+- Source: `projectsConfig` array.
+- Each card shows: title, description, tech stack tags, GitHub link, live demo link (if available).
+- Stack tags use `<Badge variant="secondary">` from Shadcn.
+
+### GitHub Contributions
+- Fetch public repos and contribution data via GitHub API using `siteConfig.githubUsername`.
+- Show a contribution graph and a paginated repo list (6 per page).
+- Use GitHub MCP if available to resolve branch or history questions.
+
+### Skills
+- Source: `skillsConfig` array. See `Skills.md` for full schema and rendering rules.
+- Group by category. Display skill icon + name + optional proficiency badge.
+
+### Grades
+- Source: `gradesConfig` array, organized by semester.
+- Display as a clean table or card grid per semester.
+- Show subject name, grade/mark, and units. Include GPA per semester if available.
+- This section is a selling point — present it cleanly and confidently.
