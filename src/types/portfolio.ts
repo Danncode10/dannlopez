@@ -48,6 +48,17 @@ export interface SemesterGrades {
   subjects: Subject[];
 }
 
+export interface Credential {
+  id: string;
+  title: string;
+  issuer: string;
+  issuerIcon?: string;
+  issuedDate: string;
+  credentialId?: string;
+  credentialUrl: string;
+  skills?: string[];
+}
+
 export interface SiteConfig {
   name: string;
   shortName: string;
@@ -64,4 +75,5 @@ export interface SiteConfig {
     email: string;
   };
   avatar: string;
+  resumeUrl?: string;
 }

@@ -3,6 +3,7 @@ import type {
   Skill,
   SemesterGrades,
   SiteConfig,
+  Credential,
 } from "@/types/portfolio";
 
 /**
@@ -26,10 +27,11 @@ export const siteConfig: SiteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://danncode10.vercel.app",
   socials: {
     github: "https://github.com/Danncode10",
-    linkedin: "", // [EDIT ME] add your LinkedIn URL here
+    linkedin: "https://www.linkedin.com/in/lester-dann-lopez-26874b190/",
     email: "mailto:Lesterdannlopez7@gmail.com",
   },
   avatar: "/avatar.png",
+  resumeUrl: "/resume.docx",
 };
 
 /**
@@ -389,6 +391,78 @@ export const skillsConfig: Skill[] = [
   { name: "Computer Vision", category: "CS Concepts", proficiency: "Intermediate" },
   { name: "Embedded Systems", category: "CS Concepts", proficiency: "Intermediate" },
   { name: "AI Agents", category: "CS Concepts", proficiency: "Intermediate" },
+];
+
+/**
+ * CREDENTIALS — Licenses & Certifications.
+ * Each entry maps to a clickable verification link.
+ */
+export const credentialsConfig: Credential[] = [
+  {
+    id: "python-essentials-1",
+    title: "Python Essentials 1",
+    issuer: "Cisco",
+    issuerIcon: "cisco",
+    issuedDate: "May 2026",
+    credentialUrl:
+      "https://www.credly.com/badges/6af07665-73a8-4b7b-81b4-a1597ee349b4/linked_in_profile",
+    skills: ["Python"],
+  },
+  {
+    id: "crash-course-python",
+    title: "Crash Course on Python",
+    issuer: "Google",
+    issuerIcon: "google",
+    issuedDate: "Dec 2024",
+    credentialId: "UXAPAOH0GX3Z",
+    credentialUrl:
+      "https://www.coursera.org/account/accomplishments/verify/UXAPAOH0GX3Z",
+    skills: ["NumPy", "pandas", "Python"],
+  },
+  {
+    id: "intro-git-github",
+    title: "Introduction to Git and GitHub",
+    issuer: "Google",
+    issuerIcon: "google",
+    issuedDate: "Dec 2024",
+    credentialId: "HRAI0KOWM9B6",
+    credentialUrl:
+      "https://www.coursera.org/account/accomplishments/verify/HRAI0KOWM9B6",
+    skills: ["Git", "GitHub"],
+  },
+  {
+    id: "learn-cpp",
+    title: "Learn C++ Programming — Beginner to Advance",
+    issuer: "Udemy",
+    issuerIcon: "udemy",
+    issuedDate: "Aug 2024",
+    credentialId: "UC-333c0a61-60b8-4778-9680-ef10dd15fbba",
+    credentialUrl:
+      "https://www.udemy.com/certificate/UC-333c0a61-60b8-4778-9680-ef10dd15fbba/",
+    skills: ["C++"],
+  },
+  {
+    id: "ux-process",
+    title: "Start the UX Design Process: Empathize, Define, and Ideate",
+    issuer: "Google",
+    issuerIcon: "google",
+    issuedDate: "May 2024",
+    credentialId: "T4TH28LGSAEJ",
+    credentialUrl:
+      "https://www.coursera.org/account/accomplishments/verify/T4TH28LGSAEJ",
+    skills: ["UX Design", "Tailwind CSS"],
+  },
+  {
+    id: "ux-foundations",
+    title: "Foundations of User Experience (UX) Design",
+    issuer: "Google",
+    issuerIcon: "google",
+    issuedDate: "May 2024",
+    credentialId: "6AG3YLPGADDX",
+    credentialUrl:
+      "https://www.coursera.org/account/accomplishments/verify/6AG3YLPGADDX",
+    skills: ["User Experience (UX)", "Bootstrap"],
+  },
 ];
 
 /**

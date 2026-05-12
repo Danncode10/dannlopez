@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Download } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/lib/config";
@@ -11,6 +11,7 @@ const navLinks = [
   { label: "Projects", href: "#projects" },
   { label: "GitHub", href: "#github" },
   { label: "Skills", href: "#skills" },
+  { label: "Credentials", href: "#credentials" },
   { label: "Grades", href: "#grades" },
 ];
 
@@ -112,6 +113,16 @@ export function Navbar() {
           >
             <SiGithub size={16} />
           </a>
+          {siteConfig.resumeUrl && (
+            <a
+              href={siteConfig.resumeUrl}
+              download
+              className="inline-flex items-center gap-1.5 h-9 px-4 text-xs font-semibold rounded-full border border-border/50 text-foreground hover:bg-secondary transition-colors"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Resume
+            </a>
+          )}
           <a
             href="#contact"
             className="inline-flex items-center gap-1.5 h-9 px-4 text-xs font-semibold rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
@@ -150,10 +161,21 @@ export function Navbar() {
                 {link.label}
               </a>
             ))}
+            {siteConfig.resumeUrl && (
+              <a
+                href={siteConfig.resumeUrl}
+                download
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center gap-2 mt-3 px-4 py-3 text-sm font-semibold rounded-lg border border-border text-foreground"
+              >
+                <Download className="h-4 w-4" />
+                Download Resume
+              </a>
+            )}
             <a
               href="#contact"
               onClick={() => setMobileOpen(false)}
-              className="block mt-3 px-4 py-3 text-sm font-semibold rounded-lg bg-primary text-primary-foreground text-center"
+              className="block mt-2 px-4 py-3 text-sm font-semibold rounded-lg bg-primary text-primary-foreground text-center"
             >
               Get in touch
             </a>

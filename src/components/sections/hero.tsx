@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown, Download } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { siteConfig } from "@/lib/config";
 import { Magnetic } from "@/components/motion/magnetic";
@@ -123,6 +123,19 @@ export function Hero() {
                 GitHub
               </a>
             </Magnetic>
+
+            {siteConfig.resumeUrl && (
+              <Magnetic strength={0.2}>
+                <a
+                  href={siteConfig.resumeUrl}
+                  download
+                  className="inline-flex h-12 items-center gap-2 px-7 text-sm font-semibold rounded-xl border border-border text-foreground hover:bg-secondary transition-all"
+                >
+                  <Download className="h-4 w-4" />
+                  Resume
+                </a>
+              </Magnetic>
+            )}
           </div>
         </div>
 
