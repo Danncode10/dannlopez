@@ -42,8 +42,8 @@ export function About() {
             About Me
           </span>
           <h2 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tight">
-            Student by title.{" "}
-            <span className="text-muted-foreground">Builder by practice.</span>
+            Production-minded engineer.{" "}
+            <span className="text-muted-foreground">Built for real-world systems.</span>
           </h2>
         </FadeIn>
 

@@ -63,7 +63,7 @@ export const projectsConfig: Project[] = [
     category: "Web Apps",
     stack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"],
     githubUrl: "https://github.com/Danncode10/chrisautoshine_v2",
-    liveUrl: "https://chrisautoshine-v2.vercel.app",
+    liveUrl: "https://www.chrisautoshinedetailing.com.au",
     featured: true,
   },
   {
