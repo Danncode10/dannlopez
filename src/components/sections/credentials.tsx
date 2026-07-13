@@ -18,6 +18,10 @@ function issuerIcon(slug?: string) {
 export function Credentials() {
   if (credentialsConfig.length === 0) return null;
 
+  const topIssuers = Array.from(
+    new Set(credentialsConfig.slice(0, 5).map((cred) => cred.issuer))
+  ).join(", ");
+
   return (
     <section
       id="credentials"
@@ -29,11 +33,11 @@ export function Credentials() {
             Credentials
           </span>
           <h2 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tight">
-            Licenses & Certifications.
+            Credentials & Experience.
           </h2>
           <p className="mt-4 text-muted-foreground max-w-2xl text-lg">
-            Verified credentials from Google, Cisco, and Udemy — each one
-            clickable to view the original certificate.
+            Software engineering OJT, international academic work, and verified
+            certifications from {topIssuers}.
           </p>
         </FadeIn>
 

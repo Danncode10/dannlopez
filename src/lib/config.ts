@@ -18,10 +18,10 @@ import type {
 export const siteConfig: SiteConfig = {
   name: "Lester Dann G. Lopez",
   shortName: "Dann",
-  role: "BS Computer Science (Robotics) Student",
+  role: "Software Engineer & BS Computer Science (Robotics) Student",
   university: "Nueva Vizcaya State University",
   degree: "BS Computer Science — Robotics & Automation",
-  bio: "I'm a Computer Science student building across Web, AI, Robotics, and Automation. I ship real products end-to-end — from gesture-controlled Arduino hardware to AI-native Next.js platforms — and I treat every project as a chance to push past what's expected of a student.",
+  bio: "I'm a software engineer and Computer Science student building production-grade Web, AI, Robotics, and Automation systems. I ship real client-facing products end-to-end, completed software engineering OJT at FullSuite, and finished GCI World through the University of Tokyo while continuing to build beyond what is expected of a student.",
   githubUsername: "Danncode10",
   email: "Lesterdannlopez7@gmail.com",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://danncode10.vercel.app",
@@ -42,6 +42,69 @@ export const siteConfig: SiteConfig = {
 export const projectsConfig: Project[] = [
   // ─── FEATURED ──────────────────────────────────────────────────
   {
+    id: "attyjuan-ai",
+    title: "AttyJuan AI",
+    tagline: "AI-powered legal platform for the Philippine legal context.",
+    description:
+      "A legal-tech platform that helps citizens understand legal processes and gives lawyers a modern workspace for clients, cases, and AI-assisted legal workflows.",
+    category: "AI",
+    stack: ["Next.js", "TypeScript", "AI", "Legal Tech", "Vercel"],
+    githubUrl: "https://github.com/Danncode10/AttyJuan",
+    liveUrl: "https://atty-juan-phi.vercel.app",
+    isPrivate: true,
+    featured: true,
+  },
+  {
+    id: "chris-auto-shine-australia",
+    title: "Chris Auto Shine",
+    tagline: "Australian auto-detailing business website.",
+    description:
+      "A polished, conversion-focused website for an Australia-based auto detailing brand, built to present services clearly and turn visitors into bookings.",
+    category: "Web Apps",
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"],
+    githubUrl: "https://github.com/Danncode10/chrisautoshine_v2",
+    liveUrl: "https://www.chrisautoshinedetailing.com.au",
+    featured: true,
+  },
+  {
+    id: "bismi-cafe-and-resto",
+    title: "Bismi Cafe and Resto",
+    tagline: "Restaurant website for menu, brand, and customer discovery.",
+    description:
+      "A modern cafe and restaurant site built to showcase the brand, menu, and customer-facing details with a fast, mobile-first experience.",
+    category: "Web Apps",
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"],
+    githubUrl: "https://github.com/Danncode10/bismi-cafe-and-resto",
+    liveUrl: "https://bismicafeandresto.vercel.app",
+    isPrivate: true,
+    featured: true,
+  },
+  {
+    id: "fix-pinas",
+    title: "FixPinas",
+    tagline: "Civic issue reporting platform for the Philippines.",
+    description:
+      "A civic-tech platform for reporting local issues, tracking public concerns, and making community problems easier to surface and resolve.",
+    category: "Web Apps",
+    stack: ["Next.js", "TypeScript", "Civic Tech", "Tailwind CSS", "Vercel"],
+    githubUrl: "https://github.com/Danncode10/fix-pinas",
+    liveUrl: "https://fix-pinas.vercel.app",
+    isPrivate: true,
+    featured: true,
+  },
+  {
+    id: "gci-world-university-tokyo",
+    title: "GCI World",
+    tagline: "University of Tokyo global challenge completion project.",
+    description:
+      "Completed GCI World through the University of Tokyo, applying software engineering and global problem-solving practice in an international academic setting.",
+    category: "Learning",
+    stack: ["Python", "Data Science", "Global Challenge", "University of Tokyo"],
+    githubUrl: "https://github.com/Danncode10/GCI-World-April-2026",
+    isPrivate: true,
+    featured: true,
+  },
+  {
     id: "nextviz",
     title: "NextViz",
     tagline: "Local-first, node-based automation engine for Next.js.",
@@ -61,17 +124,6 @@ export const projectsConfig: Project[] = [
     category: "Tools",
     stack: ["Next.js", "Supabase", "TypeScript", "Tailwind CSS", "Vercel"],
     githubUrl: "https://github.com/Danncode10/DannFlow",
-    featured: true,
-  },
-  {
-    id: "attyjuan",
-    title: "AttyJuan",
-    tagline: "[EDIT ME] One-line tagline for AttyJuan.",
-    description:
-      "[EDIT ME] 2–3 sentences describing what AttyJuan does, who it's for, and the problem it solves. Update this in src/lib/config.ts.",
-    category: "Web Apps",
-    stack: ["Next.js", "TypeScript"],
-    isPrivate: true,
     featured: true,
   },
   {
@@ -97,17 +149,6 @@ export const projectsConfig: Project[] = [
     githubUrl: "https://github.com/Danncode10/AdventFlow",
     liveUrl: "https://advent-flow-six.vercel.app",
     featured: true,
-  },
-
-  // ─── PRIVATE — PLACEHOLDERS ─────────────────────────────────────
-  {
-    id: "private-2",
-    title: "[EDIT ME] Private Project Name",
-    tagline: "[EDIT ME] One-line tagline.",
-    description: "[EDIT ME] Replace this with a 2–3 sentence description.",
-    category: "Web Apps",
-    stack: ["TypeScript"],
-    isPrivate: true,
   },
 
   // ─── AI ─────────────────────────────────────────────────────────
@@ -398,6 +439,22 @@ export const skillsConfig: Skill[] = [
  * Each entry maps to a clickable verification link.
  */
 export const credentialsConfig: Credential[] = [
+  {
+    id: "fullsuite-software-engineer-ojt",
+    title: "Software Engineer OJT",
+    issuer: "FullSuite",
+    issuedDate: "2026",
+    credentialUrl: siteConfig.socials.linkedin ?? siteConfig.socials.github,
+    skills: ["Software Engineering", "Next.js", "TypeScript", "Team Workflow"],
+  },
+  {
+    id: "gci-world-university-tokyo",
+    title: "GCI World — Completed",
+    issuer: "The University of Tokyo",
+    issuedDate: "Apr 2026",
+    credentialUrl: "https://github.com/Danncode10/GCI-World-April-2026",
+    skills: ["Global Challenge", "Data Science", "Problem Solving"],
+  },
   {
     id: "python-essentials-1",
     title: "Python Essentials 1",

@@ -93,6 +93,7 @@ function SkillCard({ skill }: { skill: Skill }) {
     <div className="group relative flex items-center gap-3 rounded-xl border border-border bg-background p-4 hover:border-primary/40 hover:-translate-y-0.5 transition-all">
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-foreground">
         {Icon ? (
+          // eslint-disable-next-line react-hooks/static-components
           <Icon size={20} color="currentColor" />
         ) : (
           <span className="text-sm font-bold">{skill.name.charAt(0)}</span>
