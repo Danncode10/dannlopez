@@ -26,13 +26,23 @@ export function DropdownMenu({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative inline-block text-left" ref={containerRef}>
       {React.Children.map(children, (child) => {
-        if (React.isValidElement(child) && (child.type as any).displayName === "DropdownMenuTrigger") {
-          return React.cloneElement(child as any, { onClick: () => setOpen(!open) })
+        if (!React.isValidElement(child)) return child
+
+        const childType = child.type as React.ComponentType & {
+          displayName?: string
         }
-        if (React.isValidElement(child) && (child.type as any).displayName === "DropdownMenuContent") {
+        const element = child as React.ReactElement<{
+          onClick?: () => void
+          setOpen?: (open: boolean) => void
+        }>
+
+        if (childType.displayName === "DropdownMenuTrigger") {
+          return React.cloneElement(element, { onClick: () => setOpen(!open) })
+        }
+        if (childType.displayName === "DropdownMenuContent") {
           return (
             <AnimatePresence>
-              {open && React.cloneElement(child as any, { setOpen })}
+              {open && React.cloneElement(element, { setOpen })}
             </AnimatePresence>
           )
         }

@@ -1,6 +1,14 @@
 "use client";
 
-import { Children, cloneElement, isValidElement, useEffect, useState, type ReactNode } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useRef,
+  type ReactElement,
+  type ReactNode,
+} from "react";
+import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface StaggerProps {
@@ -21,10 +29,9 @@ export function Stagger({
     <div className={className}>
       {items.map((child, i) => {
         if (!isValidElement(child)) return child;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return cloneElement(child as any, {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ...(child.props as any),
+        const element = child as ReactElement<StaggerItemProps>;
+        return cloneElement(element, {
+          ...element.props,
           _staggerDelay: delayChildren + i * stagger,
           key: child.key ?? i,
         });
@@ -46,15 +53,12 @@ export function StaggerItem({
   distance = 20,
   _staggerDelay = 0,
 }: StaggerItemProps) {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    const id = setTimeout(() => setShow(true), 16);
-    return () => clearTimeout(id);
-  }, []);
+  const ref = useRef<HTMLDivElement>(null);
+  const show = useInView(ref, { once: true, margin: "-80px" });
 
   return (
     <div
+      ref={ref}
       className={cn("will-change-transform motion-reduce:transition-none", className)}
       style={{
         opacity: show ? 1 : 0,

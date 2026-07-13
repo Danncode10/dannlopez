@@ -1,20 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { ArrowRight, ChevronDown, Download } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { siteConfig } from "@/lib/config";
 import { Magnetic } from "@/components/motion/magnetic";
+import { Typewriter } from "@/components/motion/typewriter";
+import { AmbientParticles } from "@/components/motion/ambient-particles";
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
+  const [typingDone, setTypingDone] = useState(false);
 
   useEffect(() => {
     const id = setTimeout(() => setMounted(true), 16);
     return () => clearTimeout(id);
   }, []);
 
-  const words = siteConfig.name.split(" ");
+  const highlightStart = siteConfig.name.indexOf(siteConfig.shortName);
+  const highlightEnd =
+    highlightStart >= 0
+      ? highlightStart + siteConfig.shortName.length
+      : siteConfig.name.length;
 
   const reveal = (delay: number): React.CSSProperties => ({
     opacity: mounted ? 1 : 0,
@@ -22,29 +30,42 @@ export function Hero() {
     transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
   });
 
+  const introReveal = (delay = 0) => ({
+    opacity: typingDone ? 1 : 0.28,
+    filter: typingDone ? "blur(0px)" : "blur(10px)",
+    y: typingDone ? 0 : 10,
+    transition: {
+      duration: 0.8,
+      delay,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  });
+
   return (
     <section
       id="home"
       className="relative isolate overflow-hidden min-h-[92vh] flex items-center"
+      style={{
+        background:
+          "radial-gradient(ellipse 860px 620px at 82% 0%, color-mix(in oklab, var(--color-primary) 20%, transparent), transparent 60%), var(--color-background)",
+      }}
     >
-      {/* Gradient blobs with subtle pulse */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-primary/20 blur-[120px] -z-10 animate-pulse-slow"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-accent/30 blur-[120px] -z-10 animate-pulse-slow [animation-delay:1s]"
-      />
-
       {/* Grid overlay */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-50"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 grid-fade-overlay"
+      />
+      <AmbientParticles active count={140} />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 -z-10"
         style={{
-          backgroundImage:
-            "linear-gradient(to right, var(--color-foreground) 1px, transparent 1px), linear-gradient(to bottom, var(--color-foreground) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
+          background:
+            "linear-gradient(to top, var(--color-background), transparent)",
         }}
       />
 
@@ -52,9 +73,10 @@ export function Hero() {
         {/* LEFT — copy */}
         <div className="text-left">
           {/* Status badge */}
-          <div
+          <motion.div
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5"
-            style={reveal(0)}
+            initial={{ opacity: 0.2, filter: "blur(8px)", y: 8 }}
+            animate={introReveal(0)}
           >
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
@@ -63,31 +85,28 @@ export function Hero() {
             <span className="text-xs font-semibold text-primary">
               {siteConfig.role}
             </span>
-          </div>
+          </motion.div>
 
-          {/* Name — word-by-word reveal */}
+          {/* Name — DannFlow-style typewriter reveal */}
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[1.05] text-foreground">
-            {words.map((word, i) => (
-              <span
-                key={i}
-                className="inline-block mr-[0.25em]"
-                style={reveal(0.08 + i * 0.08)}
-              >
-                {i === words.length - 1 ? (
-                  <span className="bg-gradient-to-r from-primary via-blue-400 to-accent-foreground bg-clip-text text-transparent">
-                    {word}
-                  </span>
-                ) : (
-                  word
-                )}
-              </span>
-            ))}
+            <Typewriter
+              text={siteConfig.name}
+              speed={64}
+              delay={180}
+              onComplete={() => setTypingDone(true)}
+              highlight={{
+                start: highlightStart >= 0 ? highlightStart : 0,
+                end: highlightEnd,
+                delay: 250,
+              }}
+            />
           </h1>
 
           {/* Bio */}
-          <p
+          <motion.p
             className="mt-6 max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed"
-            style={reveal(0.4)}
+            initial={{ opacity: 0.25, filter: "blur(10px)", y: 12 }}
+            animate={introReveal(0.05)}
           >
             Building across{" "}
             <span className="text-foreground font-semibold">Web</span>,{" "}
@@ -95,12 +114,13 @@ export function Hero() {
             <span className="text-foreground font-semibold">Robotics</span>, and{" "}
             <span className="text-foreground font-semibold">Automation</span>{" "}
             — shipping real products as a CS student at {siteConfig.university}.
-          </p>
+          </motion.p>
 
           {/* CTAs */}
-          <div
+          <motion.div
             className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4"
-            style={reveal(0.55)}
+            initial={{ opacity: 0.25, filter: "blur(10px)", y: 12 }}
+            animate={introReveal(0.16)}
           >
             <Magnetic strength={0.2}>
               <a
@@ -136,26 +156,32 @@ export function Hero() {
                 </a>
               </Magnetic>
             )}
-          </div>
+          </motion.div>
         </div>
 
         {/* RIGHT — avatar */}
-        <div
+        <motion.div
           className="hidden lg:flex items-center justify-center"
-          style={{
-            ...reveal(0.2),
-            transitionDuration: "0.9s",
+          initial={{ opacity: 0.2, filter: "blur(14px)", y: 18, scale: 0.96 }}
+          animate={
+            typingDone
+              ? { opacity: 1, filter: "blur(0px)", y: 0, scale: 1 }
+              : { opacity: 0.2, filter: "blur(14px)", y: 18, scale: 0.96 }
+          }
+          transition={{
+            duration: 1,
+            delay: typingDone ? 0.24 : 0,
+            ease: [0.16, 1, 0.3, 1],
           }}
         >
-          <div className="relative">
-            {/* Animated glow */}
+          <TiltFrame>
             <div
               aria-hidden
-              className="absolute -inset-6 rounded-full bg-gradient-to-tr from-primary via-blue-400 to-accent-foreground opacity-40 blur-2xl animate-spin-slow"
+              className="absolute -inset-4 rounded-full border border-primary/20"
             />
 
             {/* Floating wrapper */}
-            <div className="relative aspect-square w-[320px] xl:w-[380px] rounded-full overflow-hidden border-4 border-card shadow-2xl ring-1 ring-primary/30 animate-float">
+            <div className="relative aspect-square w-[320px] xl:w-[380px] rounded-[2rem] overflow-hidden border border-border bg-card shadow-2xl ring-1 ring-primary/30 animate-float">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={siteConfig.avatar}
@@ -163,8 +189,8 @@ export function Hero() {
                 className="h-full w-full object-cover"
               />
             </div>
-          </div>
-        </div>
+          </TiltFrame>
+        </motion.div>
       </div>
 
       {/* Scroll cue */}
@@ -180,5 +206,18 @@ export function Hero() {
         <ChevronDown className="h-5 w-5 animate-bounce-slow" />
       </a>
     </section>
+  );
+}
+
+function TiltFrame({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      className="relative"
+      whileHover={{ rotateX: -2.5, rotateY: 3, y: -4 }}
+      transition={{ type: "spring", stiffness: 220, damping: 22 }}
+      style={{ transformStyle: "preserve-3d" }}
+    >
+      {children}
+    </motion.div>
   );
 }

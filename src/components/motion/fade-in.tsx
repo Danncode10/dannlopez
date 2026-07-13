@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
+import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type Direction = "up" | "down" | "left" | "right" | "none";
@@ -42,15 +43,12 @@ export function FadeIn({
   distance = 24,
   className,
 }: FadeInProps) {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    const id = setTimeout(() => setShow(true), 16);
-    return () => clearTimeout(id);
-  }, []);
+  const ref = useRef<HTMLDivElement>(null);
+  const show = useInView(ref, { once: true, margin: "-80px" });
 
   return (
     <div
+      ref={ref}
       className={cn("will-change-transform motion-reduce:transition-none", className)}
       style={{
         opacity: show ? 1 : 0,
