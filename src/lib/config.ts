@@ -596,10 +596,14 @@ export const gradesConfig: SemesterGrades[] = [
   },
   {
     label: "3rd Year, 2nd Semester",
+    gpa: "1.17",
     subjects: [
-      { code: "CS PC 8", name: "Programming Languages", grade: "In Progress", units: 3 },
-      { code: "CS PC 9", name: "Software Engineering 1", grade: "In Progress", units: 3 },
-      { code: "CS PC 10", name: "Social Issues and Professional Ethics", grade: "In Progress", units: 3 },
+      { code: "CS PC 8", name: "Programming Languages", grade: "1.00", units: 3 },
+      { code: "CS PC 9", name: "Software Engineering 1", grade: "1.25", units: 3 },
+      { code: "CS PC 10", name: "Social Issues and Professional Ethics", grade: "1.00", units: 3 },
+      { code: "CS PC 11", name: "Operating Systems", grade: "1.00", units: 3 },
+      { code: "CS PEC 2", name: "Intelligent Systems", grade: "1.00", units: 3 },
+      { code: "CST2_5", name: "Robotics 1", grade: "1.75", units: 3 },
     ],
   },
 ];
